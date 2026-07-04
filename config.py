@@ -36,7 +36,7 @@ TEMPERATURE = 0.0  # deterministic-as-possible generation
 #   "replay" -> replay only; error if a cassette is missing (fully offline, reproducible)
 #   "record" -> always call live and (re)record the cassette (needs key)
 #   "live"   -> always call live, never touch cassettes (needs key)
-LLM_MODE = os.getenv("WITNESS_LLM_MODE", "auto")
+LLM_MODE = os.getenv("LLM_MODE", "auto")
 
 # Free-tier rate limiting. Assume ~15 requests/minute; token bucket paces calls so runs
 # queue rather than crash. Backoff schedule applies on HTTP 429.
