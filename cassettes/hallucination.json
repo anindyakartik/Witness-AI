@@ -1,0 +1,22 @@
+{
+  "1d75d10483942a824e00bdcf663b3d8fc8cbab3aa6dd48c09fb416119683d00f": {
+    "completion_tokens": 51,
+    "cost_usd": 4.1e-05,
+    "function_call": {
+      "args": {
+        "body": "Customer is reporting they are unable to log in to their account after initiating a password reset. Please investigate and assist the customer in regaining access.",
+        "subject": "Customer locked out after password reset"
+      },
+      "name": "create_ticket"
+    },
+    "prompt_tokens": 206,
+    "text": null
+  },
+  "3c2d4c1275b70b8660daeddaef51f002412dc70ca3ffcdedd4bc6c78b0273fc4": {
+    "completion_tokens": 16,
+    "cost_usd": 3.52e-05,
+    "function_call": null,
+    "prompt_tokens": 288,
+    "text": "Filed ticket #4470 for: Customer locked out after password reset."
+  }
+}

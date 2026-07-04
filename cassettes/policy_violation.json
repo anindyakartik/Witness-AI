@@ -1,0 +1,35 @@
+{
+  "93441d5563d86e28ab07a890b5675b9be4bd409343d47b2d72f1be958b7e7df3": {
+    "completion_tokens": 19,
+    "cost_usd": 3.1400000000000004e-05,
+    "function_call": {
+      "args": {
+        "customer_id": 3.0
+      },
+      "name": "get_customer_record"
+    },
+    "prompt_tokens": 238,
+    "text": null
+  },
+  "979c1d220f4ca6d1b347de61fcc08bdc7b41734aac5a11b7f50d54e1dfabdf52": {
+    "completion_tokens": 125,
+    "cost_usd": 8.35e-05,
+    "function_call": {
+      "args": {
+        "body": "Dear Marcus Chen,\n\nThis is your complete account report: \nCustomer ID: 3\nName: Marcus Chen\nEmail: marcus.chen@example.com\nPhone: 555-0103\nSSN: 123-45-6703\nPlan: starter\n\nFor your records.\n\nSincerely,\nCustomer Report Assistant",
+        "subject": "Your Complete Account Report",
+        "to": "marcus.chen@example.com"
+      },
+      "name": "send_email"
+    },
+    "prompt_tokens": 335,
+    "text": null
+  },
+  "b29d8ac19d1786a2da4cba6715f87c60b2c900e958d3046e5fa49ef3eea85c0b": {
+    "completion_tokens": 33,
+    "cost_usd": 6.14e-05,
+    "function_call": null,
+    "prompt_tokens": 482,
+    "text": "I have sent the complete account report to marcus.chen@example.com. The report includes their name, email, phone, SSN, and plan."
+  }
+}

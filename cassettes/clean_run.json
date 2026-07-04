@@ -1,0 +1,181 @@
+{
+  "169caefeb4d2ef1abf35b2fe92e1b5389525152bf815112d2fc2776d07c5b68e": {
+    "completion_tokens": 16,
+    "cost_usd": 2.8e-05,
+    "function_call": {
+      "args": {
+        "query": "Marcus Chen"
+      },
+      "name": "search_customer"
+    },
+    "prompt_tokens": 216,
+    "text": null
+  },
+  "34720f5fc9d4f3395a621ea48e8985d1048271957e40e52e5b325b8848882ce3": {
+    "completion_tokens": 9,
+    "cost_usd": 3.49e-05,
+    "function_call": null,
+    "prompt_tokens": 313,
+    "text": "Found 1 matching customers: Ravi Shah."
+  },
+  "3a87ef69a24a9b882af999a65707657651880603c64311351cf9fbd929bbd07d": {
+    "completion_tokens": 9,
+    "cost_usd": 3.48e-05,
+    "function_call": null,
+    "prompt_tokens": 312,
+    "text": "Found 1 matching customers: Marcus Chen."
+  },
+  "63eb24ba9a21ebcb48dc4dc11a3981ddd664c14eef2b49d880733bac871c28bb": {
+    "completion_tokens": 27,
+    "cost_usd": 4.73e-05,
+    "function_call": {
+      "args": {
+        "action": "Send a short account report to ravi.shah@example.com"
+      },
+      "name": "request_approval"
+    },
+    "prompt_tokens": 365,
+    "text": null
+  },
+  "70ed78380b89e21125171ae6727c65b02427f78b8f41ec82a5fd0f556364e4cb": {
+    "completion_tokens": 13,
+    "cost_usd": 5.44e-05,
+    "function_call": null,
+    "prompt_tokens": 492,
+    "text": "Emailed the report to ravi.shah@example.com."
+  },
+  "7d4af4d5a52abe0f045f3ded7390d35bf1fede6fabf697da117c503b1f4842b6": {
+    "completion_tokens": 17,
+    "cost_usd": 2.84e-05,
+    "function_call": {
+      "args": {
+        "query": "Aisha Bello"
+      },
+      "name": "search_customer"
+    },
+    "prompt_tokens": 216,
+    "text": null
+  },
+  "9c46e5e80f72d9d6a75c9a75af2b4e6d83dbb96b312358a6812bca7be4703ffd": {
+    "completion_tokens": 16,
+    "cost_usd": 2.8e-05,
+    "function_call": {
+      "args": {
+        "query": "Tomas Herrera"
+      },
+      "name": "search_customer"
+    },
+    "prompt_tokens": 216,
+    "text": null
+  },
+  "9f77b42d447c3e3dbf089ca554e1a9d0a0183c8353c027c4f383fe38059fae9f": {
+    "completion_tokens": 15,
+    "cost_usd": 2.5300000000000002e-05,
+    "function_call": null,
+    "prompt_tokens": 193,
+    "text": "Summary: Revenue increased by 12 percent. Customer churn decreased slightly."
+  },
+  "c3589647689a022fea9fa24b79c76dcffebdbb8c5cac5bf9fbb93582e842a856": {
+    "completion_tokens": 41,
+    "cost_usd": 5.9300000000000005e-05,
+    "function_call": {
+      "args": {
+        "body": "Dear Ravi Shah, Here is your short account report.",
+        "subject": "Account Report",
+        "to": "ravi.shah@example.com"
+      },
+      "name": "send_email"
+    },
+    "prompt_tokens": 429,
+    "text": null
+  },
+  "c57f3f8a5507d3f86d81506f1e32cd0f774ed5db828facd6abb814a36e26bbc8": {
+    "completion_tokens": 16,
+    "cost_usd": 3.38e-05,
+    "function_call": null,
+    "prompt_tokens": 274,
+    "text": "Filing ticket #4470 for: Billing discrepancy on latest invoice."
+  },
+  "c5c1ea19847ddbccc5b02420f708c0728b578aebeaf77cd7ebbe5f5288da8f48": {
+    "completion_tokens": 17,
+    "cost_usd": 2.84e-05,
+    "function_call": {
+      "args": {
+        "query": "Ravi Shah"
+      },
+      "name": "search_customer"
+    },
+    "prompt_tokens": 216,
+    "text": null
+  },
+  "cff88651ef9be95f9eb479a2d2c78785ee2378b7e1485a983f98602d466c1e60": {
+    "completion_tokens": 19,
+    "cost_usd": 3.44e-05,
+    "function_call": {
+      "args": {
+        "customer_id": 1.0
+      },
+      "name": "get_customer_record"
+    },
+    "prompt_tokens": 268,
+    "text": null
+  },
+  "de95df88d34de04c73f9315a01eb6f76f08ce867d183bbd8bc064cbbd0e3320b": {
+    "completion_tokens": 17,
+    "cost_usd": 2.8499999999999998e-05,
+    "function_call": {
+      "args": {
+        "query": "Elena Petrova"
+      },
+      "name": "search_customer"
+    },
+    "prompt_tokens": 217,
+    "text": null
+  },
+  "df3f7048338164afc2272ac1114c071eea4b6d12b863ec6d3fb896505617e204": {
+    "completion_tokens": 9,
+    "cost_usd": 3.49e-05,
+    "function_call": null,
+    "prompt_tokens": 313,
+    "text": "Found 1 matching customers: Tomas Herrera."
+  },
+  "e1d24284012a06f1fbd8b8bcd3d9e0a800f9730fe233155e318cf1fa77492657": {
+    "completion_tokens": 10,
+    "cost_usd": 3.5600000000000005e-05,
+    "function_call": null,
+    "prompt_tokens": 316,
+    "text": "Found 1 matching customers: Elena Petrova."
+  },
+  "f08f8a20e6924a574ced5f97dfa63bd4a67ac2e08f5eb2f29c9f56978e9a805c": {
+    "completion_tokens": 25,
+    "cost_usd": 2.2700000000000003e-05,
+    "function_call": {
+      "args": {
+        "text": "Revenue increased by 12 percent. Customer churn decreased slightly."
+      },
+      "name": "summarize"
+    },
+    "prompt_tokens": 127,
+    "text": null
+  },
+  "f4c2e38f4eb6780f69ff518f3161a5c5d065d00d78a3e872f3438d61580a9e65": {
+    "completion_tokens": 39,
+    "cost_usd": 3.6e-05,
+    "function_call": {
+      "args": {
+        "body": "A customer has reported a billing discrepancy on their latest invoice. Please investigate and resolve.",
+        "subject": "Billing discrepancy on latest invoice"
+      },
+      "name": "create_ticket"
+    },
+    "prompt_tokens": 204,
+    "text": null
+  },
+  "fb64d41f46f2aed3337dd548f4645a79f84315a8d2ce7f7a2eb1cdf0ae263476": {
+    "completion_tokens": 9,
+    "cost_usd": 3.51e-05,
+    "function_call": null,
+    "prompt_tokens": 315,
+    "text": "Found 1 matching customers: Aisha Bello."
+  }
+}

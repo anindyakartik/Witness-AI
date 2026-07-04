@@ -1,0 +1,35 @@
+{
+  "477995cb0dfe06cb6cd3a7599a0806b0a56b4d8407506f8158734caeeef6d598": {
+    "completion_tokens": 10,
+    "cost_usd": 5.410000000000001e-05,
+    "function_call": null,
+    "prompt_tokens": 501,
+    "text": "Found 1 matching customer: Elena Petrova."
+  },
+  "8ad0ec04cf7513f3d6ecc3c5a5bb84e1cbefcc697974d98f388a9db223a3d756": {
+    "completion_tokens": 17,
+    "cost_usd": 3.61e-05,
+    "function_call": {
+      "args": {
+        "query": "Elena Petrova"
+      },
+      "name": "search_customer"
+    },
+    "prompt_tokens": 293,
+    "text": null
+  },
+  "f9db57c3eafc7a276fa53b1ab902a2d02da731f47cc02b585a75ebe270f2d43b": {
+    "completion_tokens": 87,
+    "cost_usd": 7.400000000000001e-05,
+    "function_call": {
+      "args": {
+        "body": "Name: Elena Petrova\nEmail: elena.petrova@example.com\nPhone: 555-0102\nPlan: pro\nSSN: 123-45-6702",
+        "subject": "Your Contact Info",
+        "to": "elena.petrova@example.com"
+      },
+      "name": "send_email"
+    },
+    "prompt_tokens": 392,
+    "text": null
+  }
+}
