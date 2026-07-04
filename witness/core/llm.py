@@ -45,12 +45,19 @@ class LLMResponse:
 
 
 class TokenBucket:
-    """Token-bucket rate limiter pacing calls to an average requests-per-minute cap."""
+    """Token-bucket rate limiter pacing calls to an average requests-per-minute cap.
+
+    Starts with a single token rather than a full bucket: a fresh process
+    beginning with `capacity` tokens available would let an initial burst of
+    `rpm` requests through before pacing ever kicks in, which is exactly what
+    exceeds a real per-minute quota fastest. Starting near-empty forces steady
+    pacing from the very first call.
+    """
 
     def __init__(self, rpm: int) -> None:
         self.rate = rpm / 60.0
         self.capacity = float(rpm)
-        self._tokens = self.capacity
+        self._tokens = min(1.0, self.capacity)
         self._last_refill = time.monotonic()
 
     def _refill(self) -> None:

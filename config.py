@@ -38,10 +38,13 @@ TEMPERATURE = 0.0  # deterministic-as-possible generation
 #   "live"   -> always call live, never touch cassettes (needs key)
 LLM_MODE = os.getenv("LLM_MODE", "auto")
 
-# Free-tier rate limiting. Assume ~15 requests/minute; token bucket paces calls so runs
-# queue rather than crash. Backoff schedule applies on HTTP 429.
-RATE_LIMIT_RPM = 15
-BACKOFF_SCHEDULE_S = (1, 2, 4, 8)  # exponential backoff on 429
+# Free-tier rate limiting. The live quota error observed for this key/model
+# (generativelanguage.googleapis.com/generate_content_free_tier_requests) reports
+# a hard limit of 10 requests/minute for gemini-2.5-flash-lite; 8 leaves margin.
+# Token bucket paces calls so runs queue rather than crash; backoff applies on 429,
+# extended to comfortably clear the ~18-20s reset window Google's own error reports.
+RATE_LIMIT_RPM = 8
+BACKOFF_SCHEDULE_S = (2, 4, 8, 16, 30)  # exponential backoff on 429
 
 # Notional cost accounting. Published Gemini 2.5 Flash-Lite rates (USD per 1M tokens).
 # Recorded even on free tier so CostCapRule and cost drift are meaningful.
