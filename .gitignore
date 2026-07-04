@@ -20,3 +20,6 @@ venv/
 .DS_Store
 .vscode/
 .idea/
+
+# Local Claude Code tooling config (not project source)
+.claude/
