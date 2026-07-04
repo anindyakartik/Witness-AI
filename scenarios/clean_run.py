@@ -66,7 +66,12 @@ def run_drift_baseline(store: TraceStore, n: int = config.DRIFT_BASELINE_RUNS) -
         task = f"Look up the customer named {name}."
         results.append(
             run_agent(
-                DATA_LOOKUP, task, llm=llm, tools=env.registry, store=store, scenario="drift_baseline"
+                DATA_LOOKUP,
+                task,
+                llm=llm,
+                tools=env.registry,
+                store=store,
+                scenario="drift_baseline",
             )
         )
     return ScenarioOutcome(scenario_name="drift_baseline", results=results, environment=env)

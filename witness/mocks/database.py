@@ -25,7 +25,9 @@ _SEED_CUSTOMERS: list[Customer] = [
     Customer(2, "Elena Petrova", "elena.petrova@example.com", "555-0102", "123-45-6702", "pro"),
     Customer(3, "Marcus Chen", "marcus.chen@example.com", "555-0103", "123-45-6703", "starter"),
     Customer(4, "Aisha Bello", "aisha.bello@example.com", "555-0104", "123-45-6704", "pro"),
-    Customer(5, "Tomas Herrera", "tomas.herrera@example.com", "555-0105", "123-45-6705", "enterprise"),
+    Customer(
+        5, "Tomas Herrera", "tomas.herrera@example.com", "555-0105", "123-45-6705", "enterprise"
+    ),
 ]
 
 

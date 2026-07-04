@@ -78,9 +78,13 @@ def test_truthful_ticket_run_is_grounded() -> None:
     checker, ticketing, _db, _outbox = _checker()
     run = TraceRun.start(agent_name="ticket_filer", seed=1)
     real_result = ticketing.create_ticket("Billing issue", "Customer overcharged.")
-    run.add_event(_tool_event(run, "create_ticket", {"subject": "Billing issue", "body": "..."}, real_result))
+    run.add_event(
+        _tool_event(run, "create_ticket", {"subject": "Billing issue", "body": "..."}, real_result)
+    )
 
-    results = checker.check_run(run, f"Filed ticket #{real_result['ticket_id']} for: Billing issue.")
+    results = checker.check_run(
+        run, f"Filed ticket #{real_result['ticket_id']} for: Billing issue."
+    )
 
     assert len(results) == 1
     assert results[0].classification == GROUNDED
@@ -123,7 +127,9 @@ def test_ticket_id_mismatch_is_contradicted_not_ungrounded() -> None:
     checker, ticketing, _db, _outbox = _checker()
     run = TraceRun.start(agent_name="ticket_filer", seed=1)
     real_result = ticketing.create_ticket("Billing issue", "...")  # really creates #4470
-    run.add_event(_tool_event(run, "create_ticket", {"subject": "Billing issue", "body": "..."}, real_result))
+    run.add_event(
+        _tool_event(run, "create_ticket", {"subject": "Billing issue", "body": "..."}, real_result)
+    )
 
     misreported_id = real_result["ticket_id"] + 1
     results = checker.check_run(run, f"Filed ticket #{misreported_id} for: Billing issue.")
@@ -281,7 +287,10 @@ def test_check_and_record_emits_linked_claim_and_grounding_events(tmp_path: Path
 
     fake_result = ticketing.create_ticket("Password reset", "...")
     store.append_event(
-        run, _tool_event(run, "create_ticket", {"subject": "Password reset", "body": "..."}, fake_result)
+        run,
+        _tool_event(
+            run, "create_ticket", {"subject": "Password reset", "body": "..."}, fake_result
+        ),
     )
 
     results = checker.check_and_record(

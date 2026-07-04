@@ -18,18 +18,24 @@ from witness.core.trace import (
 
 
 def test_compute_readiness_score_clean_is_100() -> None:
-    score = compute_readiness_score(ungrounded=0, contradicted=0, policy_violations=0, drift_alerts=0)
+    score = compute_readiness_score(
+        ungrounded=0, contradicted=0, policy_violations=0, drift_alerts=0
+    )
     assert score == 100
 
 
 def test_compute_readiness_score_deducts_per_class() -> None:
-    score = compute_readiness_score(ungrounded=1, contradicted=1, policy_violations=1, drift_alerts=1)
+    score = compute_readiness_score(
+        ungrounded=1, contradicted=1, policy_violations=1, drift_alerts=1
+    )
     expected = 100 - sum(config.SCORE_DEDUCTIONS.values())
     assert score == expected
 
 
 def test_compute_readiness_score_floors_at_zero() -> None:
-    score = compute_readiness_score(ungrounded=100, contradicted=0, policy_violations=0, drift_alerts=0)
+    score = compute_readiness_score(
+        ungrounded=100, contradicted=0, policy_violations=0, drift_alerts=0
+    )
     assert score == 0
 
 
@@ -78,7 +84,10 @@ def _run_with(agent_name: str, *, violations=(), grounding=(), drift=()) -> Trac
 
 
 def test_build_audit_report_clean_fleet_scores_100() -> None:
-    runs = [_run_with("summarizer", grounding=["GROUNDED"]), _run_with("data_lookup", grounding=["GROUNDED"])]
+    runs = [
+        _run_with("summarizer", grounding=["GROUNDED"]),
+        _run_with("data_lookup", grounding=["GROUNDED"]),
+    ]
     report = build_audit_report(runs)
 
     assert report.readiness_score == 100
@@ -111,7 +120,11 @@ def test_build_audit_report_aggregates_violations_and_claim_issues() -> None:
     assert ticket_filer.claim_issues[0].classification == "UNGROUNDED"
     assert len(ticket_filer.policy_violations) == 1
     assert ticket_filer.policy_violations[0].rule_name == "approval_gate"
-    expected_ticket_filer_score = 100 - config.SCORE_DEDUCTIONS["ungrounded_claim"] - config.SCORE_DEDUCTIONS["policy_violation"]
+    expected_ticket_filer_score = (
+        100
+        - config.SCORE_DEDUCTIONS["ungrounded_claim"]
+        - config.SCORE_DEDUCTIONS["policy_violation"]
+    )
     assert ticket_filer.readiness_score == expected_ticket_filer_score
 
     assert data_lookup.run_count == 1

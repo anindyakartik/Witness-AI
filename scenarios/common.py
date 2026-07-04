@@ -28,7 +28,9 @@ def build_environment(*, ticketing_degraded: bool = False) -> ScenarioEnvironmen
     ticketing = TicketingSystem(degraded=ticketing_degraded)
     outbox = EmailOutbox()
     registry = build_default_registry(database=database, ticketing=ticketing, outbox=outbox)
-    return ScenarioEnvironment(registry=registry, database=database, ticketing=ticketing, outbox=outbox)
+    return ScenarioEnvironment(
+        registry=registry, database=database, ticketing=ticketing, outbox=outbox
+    )
 
 
 @dataclass(frozen=True)

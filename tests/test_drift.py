@@ -53,7 +53,18 @@ def _synthetic_run(
 def _stable_baseline(agent_name: str, n: int = 10) -> list[TraceRun]:
     """N clean data_lookup-shaped runs: 1 search + 1 record lookup, with the small
     natural cost variance real runs have (different task inputs, token counts)."""
-    costs = [0.00038, 0.00040, 0.00041, 0.00039, 0.00042, 0.00040, 0.00038, 0.00041, 0.00039, 0.00040]
+    costs = [
+        0.00038,
+        0.00040,
+        0.00041,
+        0.00039,
+        0.00042,
+        0.00040,
+        0.00038,
+        0.00041,
+        0.00039,
+        0.00040,
+    ]
     return [
         _synthetic_run(
             agent_name,

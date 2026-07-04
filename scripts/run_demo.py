@@ -114,14 +114,16 @@ def main() -> int:
 def _print_hallucination_headline(
     outcome: ScenarioOutcome, grounding_per_run: list[list[GroundingResult]]
 ) -> bool:
-    ungrounded = [r for results in grounding_per_run for r in results if r.classification == "UNGROUNDED"]
+    ungrounded = [
+        r for results in grounding_per_run for r in results if r.classification == "UNGROUNDED"
+    ]
     if not ungrounded:
         print("x Hallucination scenario did not produce an UNGROUNDED claim (unexpected).")
         return False
     agent_name = outcome.results[0].run.agent_name
     claim = ungrounded[0]
     print(
-        f'✓ Caught {len(ungrounded)} UNGROUNDED claim: {agent_name} reported '
+        f"✓ Caught {len(ungrounded)} UNGROUNDED claim: {agent_name} reported "
         f'"{claim.claim.claim_text}" -- {claim.evidence_gap}'
     )
     return True

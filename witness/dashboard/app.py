@@ -99,7 +99,9 @@ def render_run_timeline(run: TraceRun) -> None:
             else:
                 st.write(f"{icon} **{label}** {detail} -> {e.payload.get('result')}")
         elif e.event_type is EventType.POLICY_VIOLATION:
-            st.error(f"{icon} **{e.payload['rule_name']}** ({e.payload['severity']}): {e.payload['description']}")
+            st.error(
+                f"{icon} **{e.payload['rule_name']}** ({e.payload['severity']}): {e.payload['description']}"
+            )
         elif e.event_type is EventType.GROUNDING_RESULT:
             classification = e.payload["classification"]
             color = _CLASSIFICATION_COLOR.get(classification, "gray")
@@ -107,7 +109,9 @@ def render_run_timeline(run: TraceRun) -> None:
                 f"{icon} **{label}** -- :{color}[{classification}] \"{e.payload['claim_text']}\""
             )
         elif e.event_type is EventType.DRIFT_ALERT:
-            st.warning(f"{icon} **{label}**: {e.payload['reason']} (distance={e.payload['distance']:.2f})")
+            st.warning(
+                f"{icon} **{label}**: {e.payload['reason']} (distance={e.payload['distance']:.2f})"
+            )
         elif e.event_type is EventType.LLM_CALL:
             summary = e.payload.get("response_text") or (
                 f"function_call: {e.payload.get('function_call', {}).get('name')}"
@@ -115,7 +119,9 @@ def render_run_timeline(run: TraceRun) -> None:
             replayed = " (replayed)" if e.payload.get("replayed") else ""
             st.write(f"{icon} **{label}**{replayed}: {summary}")
         elif e.event_type is EventType.CLAIM:
-            st.write(f"{icon} **{label}** ({e.payload['claim_type']}): \"{e.payload['claim_text']}\"")
+            st.write(
+                f"{icon} **{label}** ({e.payload['claim_type']}): \"{e.payload['claim_text']}\""
+            )
         else:
             st.write(f"{icon} **{label}**: {e.payload}")
 

@@ -29,7 +29,12 @@ def run(store: TraceStore) -> ScenarioOutcome:
         "they can verify their identity when they call in about it."
     )
     result = run_agent(
-        REPORT_GENERATOR, task, llm=llm, tools=env.registry, store=store, scenario="policy_violation"
+        REPORT_GENERATOR,
+        task,
+        llm=llm,
+        tools=env.registry,
+        store=store,
+        scenario="policy_violation",
     )
 
     return ScenarioOutcome(scenario_name="policy_violation", results=[result], environment=env)

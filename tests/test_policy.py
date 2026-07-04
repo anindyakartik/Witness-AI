@@ -22,7 +22,9 @@ from witness.governance.rules import (
 )
 
 
-def _tool_event(run: TraceRun, tool_name: str, args: dict, *, ok: bool = True, cost_usd: float = 0.0) -> TraceEvent:
+def _tool_event(
+    run: TraceRun, tool_name: str, args: dict, *, ok: bool = True, cost_usd: float = 0.0
+) -> TraceEvent:
     return TraceEvent.new(
         run_id=run.run_id,
         agent_name=run.agent_name,
@@ -66,7 +68,11 @@ def test_pii_leak_rule_silent_on_clean_email() -> None:
     event = _tool_event(
         run,
         "send_email",
-        {"to": "ravi.shah@example.com", "subject": "Your Account Report", "body": "Here is your summary."},
+        {
+            "to": "ravi.shah@example.com",
+            "subject": "Your Account Report",
+            "body": "Here is your summary.",
+        },
     )
     assert PIILeakRule().check(event, [], run) is None
 
@@ -99,7 +105,9 @@ def test_pii_leak_rule_ignores_non_send_email_tools() -> None:
 
 def test_approval_gate_rule_fires_without_prior_approval() -> None:
     run = TraceRun.start(agent_name="report_generator", seed=1)
-    send_event = _tool_event(run, "send_email", {"to": "x@example.com", "subject": "s", "body": "b"})
+    send_event = _tool_event(
+        run, "send_email", {"to": "x@example.com", "subject": "s", "body": "b"}
+    )
     violation = ApprovalGateRule().check(send_event, [], run)
     assert violation is not None
     assert violation.rule_name == "approval_gate"
@@ -108,14 +116,18 @@ def test_approval_gate_rule_fires_without_prior_approval() -> None:
 def test_approval_gate_rule_silent_when_approval_precedes() -> None:
     run = TraceRun.start(agent_name="report_generator", seed=1)
     approval_event = _tool_event(run, "request_approval", {"action": "send email"})
-    send_event = _tool_event(run, "send_email", {"to": "x@example.com", "subject": "s", "body": "b"})
+    send_event = _tool_event(
+        run, "send_email", {"to": "x@example.com", "subject": "s", "body": "b"}
+    )
     assert ApprovalGateRule().check(send_event, [approval_event], run) is None
 
 
 def test_approval_gate_rule_silent_on_failed_approval_followed_by_no_send() -> None:
     run = TraceRun.start(agent_name="report_generator", seed=1)
     failed_approval = _tool_event(run, "request_approval", {"action": "send email"}, ok=False)
-    send_event = _tool_event(run, "send_email", {"to": "x@example.com", "subject": "s", "body": "b"})
+    send_event = _tool_event(
+        run, "send_email", {"to": "x@example.com", "subject": "s", "body": "b"}
+    )
     # A failed approval should NOT count as satisfying the gate.
     violation = ApprovalGateRule().check(send_event, [failed_approval], run)
     assert violation is not None
@@ -123,7 +135,9 @@ def test_approval_gate_rule_silent_on_failed_approval_followed_by_no_send() -> N
 
 def test_approval_gate_rule_silent_on_failed_send() -> None:
     run = TraceRun.start(agent_name="report_generator", seed=1)
-    send_event = _tool_event(run, "send_email", {"to": "x@example.com", "subject": "s", "body": "b"}, ok=False)
+    send_event = _tool_event(
+        run, "send_email", {"to": "x@example.com", "subject": "s", "body": "b"}, ok=False
+    )
     assert ApprovalGateRule().check(send_event, [], run) is None
 
 

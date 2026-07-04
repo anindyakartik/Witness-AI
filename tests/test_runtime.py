@@ -54,7 +54,12 @@ def _build_registry() -> tuple[Any, CustomerDatabase, TicketingSystem, EmailOutb
     db = CustomerDatabase()
     ticketing = TicketingSystem(start_id=4470, degraded=False)
     outbox = EmailOutbox()
-    return build_default_registry(database=db, ticketing=ticketing, outbox=outbox), db, ticketing, outbox
+    return (
+        build_default_registry(database=db, ticketing=ticketing, outbox=outbox),
+        db,
+        ticketing,
+        outbox,
+    )
 
 
 def test_ticket_filer_clean_run_produces_valid_trace(tmp_path: Path) -> None:
@@ -198,7 +203,12 @@ def test_report_generator_clean_run_multi_step(tmp_path: Path) -> None:
         function_call={"name": "get_customer_record", "args": {"customer_id": 1}},
     )
     messages = messages + [
-        {"role": "model", "parts": [{"function_call": {"name": "get_customer_record", "args": {"customer_id": 1}}}]},
+        {
+            "role": "model",
+            "parts": [
+                {"function_call": {"name": "get_customer_record", "args": {"customer_id": 1}}}
+            ],
+        },
         {
             "role": "user",
             "parts": [
@@ -225,12 +235,22 @@ def test_report_generator_clean_run_multi_step(tmp_path: Path) -> None:
         system=REPORT_GENERATOR.system_prompt,
         messages=messages,
         tool_names=tool_names,
-        function_call={"name": "request_approval", "args": {"action": "send customer report email"}},
+        function_call={
+            "name": "request_approval",
+            "args": {"action": "send customer report email"},
+        },
     )
     messages = messages + [
         {
             "role": "model",
-            "parts": [{"function_call": {"name": "request_approval", "args": {"action": "send customer report email"}}}],
+            "parts": [
+                {
+                    "function_call": {
+                        "name": "request_approval",
+                        "args": {"action": "send customer report email"},
+                    }
+                }
+            ],
         },
         {
             "role": "user",
@@ -238,7 +258,11 @@ def test_report_generator_clean_run_multi_step(tmp_path: Path) -> None:
                 {
                     "function_response": {
                         "name": "request_approval",
-                        "response": {"ok": True, "approved": True, "action": "send customer report email"},
+                        "response": {
+                            "ok": True,
+                            "approved": True,
+                            "action": "send customer report email",
+                        },
                     }
                 }
             ],
@@ -262,7 +286,12 @@ def test_report_generator_clean_run_multi_step(tmp_path: Path) -> None:
         {
             "role": "user",
             "parts": [
-                {"function_response": {"name": "send_email", "response": {"ok": True, "email_id": 1}}}
+                {
+                    "function_response": {
+                        "name": "send_email",
+                        "response": {"ok": True, "email_id": 1},
+                    }
+                }
             ],
         },
     ]
@@ -278,7 +307,9 @@ def test_report_generator_clean_run_multi_step(tmp_path: Path) -> None:
     store = TraceStore(base_dir=tmp_path / "runs")
     llm = LLMClient(cassette_name="test", mode="replay", cassette_dir=cassette_dir)
 
-    result = run_agent(REPORT_GENERATOR, task, llm=llm, tools=registry, store=store, scenario="test")
+    result = run_agent(
+        REPORT_GENERATOR, task, llm=llm, tools=registry, store=store, scenario="test"
+    )
 
     assert result.outcome == "success"
     assert result.final_message == "Emailed the report to ravi.shah@example.com."
@@ -317,7 +348,10 @@ def test_tool_outside_allowlist_is_blocked_and_traced_not_executed(tmp_path: Pat
                 {
                     "function_response": {
                         "name": "send_email",
-                        "response": {"ok": False, "error": "tool 'send_email' not permitted for this agent"},
+                        "response": {
+                            "ok": False,
+                            "error": "tool 'send_email' not permitted for this agent",
+                        },
                     }
                 }
             ],
@@ -374,7 +408,14 @@ def test_tool_allowlist_override_permits_extra_tool_for_scenario_use(tmp_path: P
         {"role": "model", "parts": [{"function_call": function_call}]},
         {
             "role": "user",
-            "parts": [{"function_response": {"name": "send_email", "response": {"ok": True, "email_id": 1}}}],
+            "parts": [
+                {
+                    "function_response": {
+                        "name": "send_email",
+                        "response": {"ok": True, "email_id": 1},
+                    }
+                }
+            ],
         },
     ]
     _seed(

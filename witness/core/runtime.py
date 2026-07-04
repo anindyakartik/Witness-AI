@@ -96,7 +96,10 @@ def run_agent(
                 store.append_event(run, event)
 
             messages.append(
-                {"role": "user", "parts": [{"function_response": {"name": name, "response": result}}]}
+                {
+                    "role": "user",
+                    "parts": [{"function_response": {"name": name, "response": result}}],
+                }
             )
     except Exception:
         outcome = "error"

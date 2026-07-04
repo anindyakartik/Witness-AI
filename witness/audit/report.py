@@ -226,7 +226,8 @@ def build_audit_report(runs: list[TraceRun]) -> AuditReport:
         sum(1 for c in a.claim_issues if c.classification == "UNGROUNDED") for a in agent_summaries
     )
     total_contradicted = sum(
-        sum(1 for c in a.claim_issues if c.classification == "CONTRADICTED") for a in agent_summaries
+        sum(1 for c in a.claim_issues if c.classification == "CONTRADICTED")
+        for a in agent_summaries
     )
     total_policy_violations = sum(len(a.policy_violations) for a in agent_summaries)
     total_drift_alerts = sum(len(a.drift_alerts) for a in agent_summaries)

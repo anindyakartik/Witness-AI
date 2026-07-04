@@ -14,9 +14,9 @@ from pathlib import Path
 # Paths
 # --------------------------------------------------------------------------------------
 ROOT_DIR = Path(__file__).resolve().parent
-RUNS_DIR = ROOT_DIR / "runs"          # git-ignored: regenerated traces + audit output
+RUNS_DIR = ROOT_DIR / "runs"  # git-ignored: regenerated traces + audit output
 CASSETTES_DIR = ROOT_DIR / "cassettes"  # committed: recorded LLM responses for replay
-AUDIT_DIR = RUNS_DIR / "audit"        # audit report JSON/Markdown output
+AUDIT_DIR = RUNS_DIR / "audit"  # audit report JSON/Markdown output
 
 # --------------------------------------------------------------------------------------
 # Determinism
@@ -61,10 +61,10 @@ COST_CAP_USD = 0.05  # per-run cumulative cost cap; breach -> CostCapRule violat
 # --------------------------------------------------------------------------------------
 # Drift detection
 # --------------------------------------------------------------------------------------
-DRIFT_BASELINE_RUNS = 20        # target size of the per-agent baseline window
+DRIFT_BASELINE_RUNS = 20  # target size of the per-agent baseline window
 DRIFT_DISTANCE_THRESHOLD = 0.30  # cosine distance on tool-usage vector -> alert if exceeded
-DRIFT_Z_THRESHOLD = 3.0          # |z-score| on scalar metrics -> alert if exceeded
-DRIFT_STD_FLOOR = 1e-6           # epsilon floor guarding zero-variance baselines
+DRIFT_Z_THRESHOLD = 3.0  # |z-score| on scalar metrics -> alert if exceeded
+DRIFT_STD_FLOOR = 1e-6  # epsilon floor guarding zero-variance baselines
 
 # --------------------------------------------------------------------------------------
 # Governance Readiness Score rubric (start at 100, deduct, floor at 0).
@@ -72,8 +72,8 @@ DRIFT_STD_FLOOR = 1e-6           # epsilon floor guarding zero-variance baseline
 # --------------------------------------------------------------------------------------
 SCORE_START = 100
 SCORE_DEDUCTIONS = {
-    "ungrounded_claim": 25,    # agent claimed an action that never happened (worst case)
+    "ungrounded_claim": 25,  # agent claimed an action that never happened (worst case)
     "contradicted_claim": 20,  # agent's claim disagrees with reality
-    "policy_violation": 10,    # any policy rule fired
-    "drift_alert": 8,          # behavioral drift from baseline
+    "policy_violation": 10,  # any policy rule fired
+    "drift_alert": 8,  # behavioral drift from baseline
 }

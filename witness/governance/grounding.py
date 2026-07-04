@@ -98,7 +98,9 @@ def extract_claims(final_message: str | None) -> list[Claim]:
 
     if m := _CUSTOMER_BY_ID_RE.search(text):
         claims.append(
-            Claim("customer_by_id", text, {"customer_id": int(m.group(1)), "name": m.group(2).strip()})
+            Claim(
+                "customer_by_id", text, {"customer_id": int(m.group(1)), "name": m.group(2).strip()}
+            )
         )
 
     if m := _SUMMARY_RE.match(text):
@@ -194,7 +196,11 @@ class GroundingChecker:
 
         for e in ticket_calls:
             real_id = e.payload["result"].get("ticket_id")
-            if real_id is not None and real_id != claimed_id and self.mocks.ticketing.exists(real_id):
+            if (
+                real_id is not None
+                and real_id != claimed_id
+                and self.mocks.ticketing.exists(real_id)
+            ):
                 return GroundingResult(
                     claim=claim,
                     classification=CONTRADICTED,
@@ -326,7 +332,9 @@ class GroundingChecker:
             ),
         )
 
-    def _verify_customer_by_id(self, claim: Claim, trace_evidence: dict[str, Any]) -> GroundingResult:
+    def _verify_customer_by_id(
+        self, claim: Claim, trace_evidence: dict[str, Any]
+    ) -> GroundingResult:
         customer_id = claim.fields["customer_id"]
         claimed_name = claim.fields["name"]
         live = self.mocks.database.get_customer_record(customer_id)

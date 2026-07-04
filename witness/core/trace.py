@@ -287,7 +287,11 @@ class TraceStore:
         """Mark the run finished in memory and record the outcome on disk."""
         run.finish(outcome)
         with self._path_for(run.run_id).open("a", encoding="utf-8") as f:
-            record = {"record_type": "meta_update", "ended_at": run.ended_at, "outcome": run.outcome}
+            record = {
+                "record_type": "meta_update",
+                "ended_at": run.ended_at,
+                "outcome": run.outcome,
+            }
             f.write(json.dumps(record) + "\n")
 
     def load_run(self, run_id: str) -> TraceRun:
