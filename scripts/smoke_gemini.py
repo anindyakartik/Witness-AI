@@ -11,8 +11,13 @@ from __future__ import annotations
 
 import os
 import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from dotenv import load_dotenv
+
+import config
 
 load_dotenv()
 
@@ -28,7 +33,7 @@ def main() -> int:
     print(f"google-generativeai version: {genai.__version__}")
     genai.configure(api_key=api_key)
 
-    model_name = "gemini-2.5-flash-lite"
+    model_name = config.MODEL_NAME
 
     # One tool declaration in the JSON-schema shape Gemini expects for function calling.
     tools = [
