@@ -14,7 +14,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import config
 from scenarios import clean_run, drift, hallucination, policy_violation
 from scenarios.common import ScenarioOutcome
-from witness.audit.report import build_audit_report, save_report
+from witness.audit.report import AuditReport, build_audit_report, save_report
 from witness.core.trace import TraceRun, TraceStore
 from witness.governance.drift import DriftCheckResult, DriftDetector, build_fingerprint
 from witness.governance.grounding import GroundingChecker, GroundingResult, MockSystems
@@ -103,12 +103,40 @@ def main() -> int:
     ok &= _print_drift_headline(drift_outcome, drift_check_result, fingerprint.num_baseline_runs)
 
     print()
+    _print_score_breakdown(report)
     print(f"Governance Readiness Score: {report.readiness_score}/100")
     print(f"Full report: {json_path}")
     print(f"          and {md_path}")
     print("View the dashboard: streamlit run witness/dashboard/app.py")
 
     return 0 if ok else 1
+
+
+def _print_score_breakdown(report: AuditReport) -> None:
+    """Print the fleet-wide violation counts underlying the readiness score.
+
+    The three headlines above each describe one scenario's own designed-for
+    failure, but any run -- including ones not called out by name, like the
+    drift scenario's send_email call also independently leaking PII -- can
+    trigger additional flags that still count toward the score. This line makes
+    the score's arithmetic checkable from console output alone.
+    """
+    total_ungrounded = 0
+    total_contradicted = 0
+    total_policy = 0
+    total_drift = 0
+    for a in report.agent_summaries:
+        total_ungrounded += sum(1 for c in a.claim_issues if c.classification == "UNGROUNDED")
+        total_contradicted += sum(1 for c in a.claim_issues if c.classification == "CONTRADICTED")
+        total_policy += len(a.policy_violations)
+        total_drift += len(a.drift_alerts)
+
+    print(
+        f"Fleet-wide across all {report.total_runs} runs: {total_ungrounded} ungrounded, "
+        f"{total_contradicted} contradicted, {total_policy} policy violations, "
+        f"{total_drift} drift alert(s) -- see the full report for anything beyond "
+        "the 3 scenarios above."
+    )
 
 
 def _print_hallucination_headline(
