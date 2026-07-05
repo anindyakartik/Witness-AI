@@ -20,6 +20,3 @@ venv/
 .DS_Store
 .vscode/
 .idea/
-
-# Local editor/tooling config (not project source)
-.claude/
