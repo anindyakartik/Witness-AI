@@ -7,6 +7,7 @@ Usage: python scripts/run_demo.py
 from __future__ import annotations
 
 import sys
+from dataclasses import dataclass
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -53,37 +54,63 @@ def _process_outcome(
     return grounding_per_run, violations_per_run
 
 
-def main() -> int:
+@dataclass(frozen=True)
+class DemoRun:
+    """Everything produced by one full demo pass: the aggregated report plus
+    the per-scenario detail `main()` needs to print its headlines. Exposed
+    separately from `main()` so the dashboard can trigger the same generation
+    on a cold start (no persisted runs yet) without duplicating this logic."""
+
+    report: AuditReport
+    json_path: Path
+    md_path: Path
+    hallucination_outcome: ScenarioOutcome
+    hallucination_grounding: list[list[GroundingResult]]
+    policy_violations_per_run: list[list[Violation]]
+    drift_outcome: ScenarioOutcome
+    drift_check_result: DriftCheckResult
+    baseline_run_count: int
+
+
+def generate_demo(*, verbose: bool = True) -> DemoRun:
+    """Run every scenario against the committed cassettes, apply grounding and
+    policy checks, build the drift baseline, and persist the audit report.
+    Fully offline and deterministic -- no API key needed."""
+
+    def log(message: str = "") -> None:
+        if verbose:
+            print(message)
+
     _clear_prior_demo_output()
     store = TraceStore(base_dir=config.RUNS_DIR)
     policy_engine = build_default_policy_engine()
     all_produced_runs: list[TraceRun] = []
 
-    print("Witness demo: running scenarios...")
+    log("Witness demo: running scenarios...")
 
-    print("  - clean control (0-violations baseline across all 4 agents)")
+    log("  - clean control (0-violations baseline across all 4 agents)")
     control_outcome = clean_run.run_control(store)
     _process_outcome(store, policy_engine, control_outcome)
     all_produced_runs += [r.run for r in control_outcome.results]
 
-    print(f"  - drift baseline ({config.DRIFT_BASELINE_RUNS} data_lookup runs)")
+    log(f"  - drift baseline ({config.DRIFT_BASELINE_RUNS} data_lookup runs)")
     baseline_outcome = clean_run.run_drift_baseline(store)
     _process_outcome(store, policy_engine, baseline_outcome)
     all_produced_runs += [r.run for r in baseline_outcome.results]
     fingerprint = build_fingerprint("data_lookup", [r.run for r in baseline_outcome.results])
     drift_detector = DriftDetector(fingerprint)
 
-    print("  - hallucination scenario")
+    log("  - hallucination scenario")
     hallucination_outcome = hallucination.run(store)
     hallucination_grounding, _ = _process_outcome(store, policy_engine, hallucination_outcome)
     all_produced_runs += [r.run for r in hallucination_outcome.results]
 
-    print("  - policy violation scenario")
+    log("  - policy violation scenario")
     policy_outcome = policy_violation.run(store)
     _, policy_violations_per_run = _process_outcome(store, policy_engine, policy_outcome)
     all_produced_runs += [r.run for r in policy_outcome.results]
 
-    print("  - drift scenario")
+    log("  - drift scenario")
     drift_outcome = drift.run(store)
     _process_outcome(store, policy_engine, drift_outcome)
     all_produced_runs += [r.run for r in drift_outcome.results]
@@ -92,21 +119,39 @@ def main() -> int:
     report = build_audit_report(all_produced_runs)
     json_path, md_path = save_report(report)
 
+    return DemoRun(
+        report=report,
+        json_path=json_path,
+        md_path=md_path,
+        hallucination_outcome=hallucination_outcome,
+        hallucination_grounding=hallucination_grounding,
+        policy_violations_per_run=policy_violations_per_run,
+        drift_outcome=drift_outcome,
+        drift_check_result=drift_check_result,
+        baseline_run_count=fingerprint.num_baseline_runs,
+    )
+
+
+def main() -> int:
+    demo = generate_demo()
+
     print()
     print("=" * 70)
     print("WITNESS DEMO RESULTS")
     print("=" * 70)
 
     ok = True
-    ok &= _print_hallucination_headline(hallucination_outcome, hallucination_grounding)
-    ok &= _print_policy_headline(policy_violations_per_run)
-    ok &= _print_drift_headline(drift_outcome, drift_check_result, fingerprint.num_baseline_runs)
+    ok &= _print_hallucination_headline(demo.hallucination_outcome, demo.hallucination_grounding)
+    ok &= _print_policy_headline(demo.policy_violations_per_run)
+    ok &= _print_drift_headline(
+        demo.drift_outcome, demo.drift_check_result, demo.baseline_run_count
+    )
 
     print()
-    _print_score_breakdown(report)
-    print(f"Governance Readiness Score: {report.readiness_score}/100")
-    print(f"Full report: {json_path}")
-    print(f"          and {md_path}")
+    _print_score_breakdown(demo.report)
+    print(f"Governance Readiness Score: {demo.report.readiness_score}/100")
+    print(f"Full report: {demo.json_path}")
+    print(f"          and {demo.md_path}")
     print("View the dashboard: streamlit run witness/dashboard/app.py")
 
     return 0 if ok else 1

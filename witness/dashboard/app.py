@@ -9,6 +9,14 @@ Run with: streamlit run witness/dashboard/app.py
 
 from __future__ import annotations
 
+import sys
+from pathlib import Path
+
+# Streamlit adds this file's own directory to sys.path, not the repo root, so
+# `streamlit run witness/dashboard/app.py` needs this to resolve `import config`
+# and the `witness` package regardless of the caller's working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
 import pandas as pd
 import streamlit as st
 
@@ -188,11 +196,18 @@ def main() -> None:
     runs = _load_runs(runs_dir_marker)
 
     if not runs:
-        st.warning(
-            "No runs found. Run `python scripts/run_demo.py` first to generate a "
-            "demo trace, then reload this page."
-        )
-        return
+        with st.spinner(
+            "No trace data yet — generating the demo run from committed cassettes "
+            "(offline, no API key needed, first load only)..."
+        ):
+            from scripts.run_demo import generate_demo
+
+            generate_demo(verbose=False)
+        # `_load_runs`'s marker argument is unhashed (leading underscore, by
+        # design -- see its docstring), so a changed marker alone won't bust
+        # the cache within the same process; clear it explicitly.
+        _load_runs.clear()
+        runs = _load_runs(str(sorted(config.RUNS_DIR.glob("*.jsonl"))))
 
     report = build_audit_report(runs)
     render_fleet_overview(report)

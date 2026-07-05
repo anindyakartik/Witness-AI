@@ -21,5 +21,5 @@ venv/
 .vscode/
 .idea/
 
-# Local Claude Code tooling config (not project source)
+# Local editor/tooling config (not project source)
 .claude/
