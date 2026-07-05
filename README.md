@@ -3,7 +3,6 @@
 **Runtime governance and observability for multi-agent AI systems.**
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-63%20passing-brightgreen)](tests/)
 [![No API key required](https://img.shields.io/badge/demo-offline%2C%20no%20API%20key-informational)](#quickstart)
 
@@ -152,7 +151,3 @@ This is an illustrative, single-node project, not a production system. Being dir
 - **Streaming policy enforcement**: move `PolicyEngine` from a post-hoc pass to a hook the runtime calls synchronously before a tool executes, so a violation can block the action instead of just flagging it afterward.
 - **Multi-tenant trace isolation**, with per-tenant baselines for drift and per-tenant readiness scores, since a shared fleet fingerprint stops being meaningful once agents serve genuinely different workloads.
 - **A real claim-extraction model** (a small, cheap, constrained LLM call) as a fallback when regex extraction doesn't match a known format, keeping deterministic verification as the non-negotiable second stage.
-
-## License
-
-[MIT](LICENSE)
