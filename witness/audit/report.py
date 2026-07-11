@@ -2,7 +2,7 @@
 a transparent, documented Governance Readiness Score.
 
 Reads only from the trace layer (policy_violation, grounding_result, and
-drift_alert events already recorded by the governance modules) -- this module
+drift_alert events already recorded by the governance modules). This module
 performs no verification of its own, only aggregation and scoring.
 """
 
@@ -46,7 +46,7 @@ class PolicyViolationEntry:
 @dataclass(frozen=True)
 class ClaimIssueEntry:
     """An ungrounded or contradicted claim, with its evidence gap. GROUNDED
-    claims are counted but not itemized here -- there's nothing to audit."""
+    claims are counted but not itemized here, there's nothing to audit."""
 
     claim_text: str
     claim_type: str
@@ -122,7 +122,7 @@ class AuditReport:
             if agent.claim_issues:
                 lines += ["", "### Claim Issues"]
                 lines += [
-                    f'- **{c.classification}** ({c.claim_type}): "{c.claim_text}" -- {c.evidence_gap}'
+                    f'- **{c.classification}** ({c.claim_type}): "{c.claim_text}". {c.evidence_gap}'
                     for c in agent.claim_issues
                 ]
 

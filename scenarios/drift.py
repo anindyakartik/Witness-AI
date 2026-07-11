@@ -1,8 +1,8 @@
 """Scenario: behavioral drift.
 
 data_lookup is given a `tool_allowlist_override` that adds `send_email` for one
-run -- simulating an agent whose behavior has structurally expanded beyond its
-declared allowlist -- and asked to email a customer's info. This produces a
+run, simulating an agent whose behavior has structurally expanded beyond its
+declared allowlist, and asked to email a customer's info. This produces a
 genuine ToolAllowlistRule violation (judged against the agent's canonical
 allowlist) and a genuine DriftDetector alert (a tool absent from the baseline).
 """

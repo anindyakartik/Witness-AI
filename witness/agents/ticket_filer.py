@@ -1,7 +1,7 @@
 """The ticket_filer agent: files support tickets.
 
 Its tool allowlist includes `get_ticket`, which is what lets a careful run confirm
-a ticket exists before claiming success -- and what makes the hallucination
+a ticket exists before claiming success, and what makes the hallucination
 scenario's failure mode interesting: even an agent that trusts its tools can be
 misled when the tool itself lies about what happened.
 """

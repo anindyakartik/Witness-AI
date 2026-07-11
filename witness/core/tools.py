@@ -101,7 +101,7 @@ class ToolRegistry:
 
 
 def _request_approval(action: str) -> dict[str, Any]:
-    """Mock human approval gate. Always grants -- the point is whether the agent
+    """Mock human approval gate. Always grants, the point is whether the agent
     calls it before a sensitive action, not whether approval logic itself varies."""
     return {"ok": True, "approved": True, "action": action}
 

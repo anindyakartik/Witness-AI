@@ -4,7 +4,7 @@ Each test pre-seeds a cassette with the exact scripted Gemini responses for a
 multi-turn conversation, then runs the real `run_agent` loop against real tools and
 mock services in LLM_MODE="replay". This proves the plan -> call tool -> observe ->
 repeat control flow, trace completeness, and allowlist enforcement without needing
-a live GEMINI_API_KEY -- only recording *new* cassettes needs one.
+a live GEMINI_API_KEY, only recording *new* cassettes needs one.
 """
 
 from __future__ import annotations
@@ -385,7 +385,7 @@ def test_tool_allowlist_override_permits_extra_tool_for_scenario_use(tmp_path: P
     """The drift scenario needs an agent to genuinely call a tool outside its
     canonical allowlist. The runtime must let that through when explicitly
     overridden, while governance rules (built later) still judge against the
-    agent's real, declared allowlist -- not the override."""
+    agent's real, declared allowlist, not the override."""
     registry, _db, _ticketing, outbox = _build_registry()
     cassette_dir = tmp_path / "cassettes"
     cassette = Cassette(cassette_dir / "test.json")

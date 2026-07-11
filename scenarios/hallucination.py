@@ -3,7 +3,7 @@
 Ticketing runs in degraded mode: `create_ticket` reports success with a real-
 looking ticket id, but never persists it (see mocks.ticketing.TicketingSystem).
 A real Gemini-driven ticket_filer agent, trusting its tool the way any agent
-would, then claims a ticket was filed that doesn't exist -- caught afterward by
+would, then claims a ticket was filed that doesn't exist, caught afterward by
 GroundingChecker as UNGROUNDED. The hallucination itself is genuine; only its
 replay via cassette is what makes it reproducible.
 """

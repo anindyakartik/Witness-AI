@@ -16,7 +16,7 @@ def _synthetic_run(
     llm_calls: int,
 ) -> TraceRun:
     """Build a run with the given tool calls and cost, without needing the LLM
-    client or real mocks -- drift only cares about the shape of the trace."""
+    client or real mocks. Drift only cares about the shape of the trace."""
     run = TraceRun.start(agent_name=agent_name, seed=1)
     per_call_cost = total_cost_usd / llm_calls if llm_calls else 0.0
     for _ in range(llm_calls):
@@ -119,7 +119,7 @@ def test_alert_on_cost_spike_via_z_score() -> None:
     fingerprint = build_fingerprint("data_lookup", baseline)
     detector = DriftDetector(fingerprint)
 
-    # Same tools, but cost is wildly higher than baseline -- e.g. 50x.
+    # Same tools, but cost is wildly higher than baseline, e.g. 50x.
     expensive_run = _synthetic_run(
         "data_lookup",
         tool_names=["search_customer", "get_customer_record"],

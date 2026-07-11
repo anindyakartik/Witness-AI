@@ -1,4 +1,4 @@
-"""Tests for the GroundingChecker -- the project's core.
+"""Tests for the GroundingChecker, the project's core.
 
 Proves the central claim: a truthful run yields all GROUNDED claims, and the
 manufactured hallucination (a tool that reports success for a write it silently
@@ -122,7 +122,7 @@ def test_hallucination_is_caught_as_ungrounded_with_evidence_gap() -> None:
 def test_ticket_id_mismatch_is_contradicted_not_ungrounded() -> None:
     """A real ticket was filed, but the agent misreports its id. Since real
     evidence for *a* ticket from this run exists, this must be CONTRADICTED, not
-    UNGROUNDED -- the distinction the brief draws between 'no evidence' and
+    UNGROUNDED, the distinction the brief draws between 'no evidence' and
     'evidence disagrees.'"""
     checker, ticketing, _db, _outbox = _checker()
     run = TraceRun.start(agent_name="ticket_filer", seed=1)

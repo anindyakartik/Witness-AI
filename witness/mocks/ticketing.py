@@ -1,7 +1,7 @@
 """Deterministic, in-memory support ticket system: ground truth for grounding checks.
 
 Ticket ids are assigned like a real autoincrement primary key, and existence can be
-queried directly (`exists`, `get_ticket`) -- this is what the GroundingChecker
+queried directly (`exists`, `get_ticket`), this is what the GroundingChecker
 compares agent claims against, independent of anything the agent believes happened.
 """
 
@@ -25,7 +25,7 @@ class TicketingSystem:
     """Deterministic mock ticketing system with an optional degraded mode.
 
     In `degraded` mode, `create_ticket` allocates an id and returns a plausible
-    success payload for it, but never persists the ticket -- simulating a backend
+    success payload for it, but never persists the ticket, simulating a backend
     that acknowledges a write it silently dropped. The id counter still advances
     (as a real autoincrement PK would even on a rolled-back insert), so the id in
     the fake acknowledgment looks exactly like a real one. This is how a genuine,

@@ -1,7 +1,7 @@
 """Policy rules: PII leaks, missing approvals, cost overruns, and allowlist breaches.
 
 Each rule inspects one event plus the events that preceded it in the same run and
-returns a Violation or None. Rules are pure and stateless between calls -- all
+returns a Violation or None. Rules are pure and stateless between calls, all
 context they need is passed in, so PolicyEngine can evaluate them in a single
 sequential pass over a run's ordered trace.
 """

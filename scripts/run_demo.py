@@ -75,7 +75,7 @@ class DemoRun:
 def generate_demo(*, verbose: bool = True) -> DemoRun:
     """Run every scenario against the committed cassettes, apply grounding and
     policy checks, build the drift baseline, and persist the audit report.
-    Fully offline and deterministic -- no API key needed."""
+    Fully offline and deterministic, no API key needed."""
 
     def log(message: str = "") -> None:
         if verbose:
@@ -161,8 +161,8 @@ def _print_score_breakdown(report: AuditReport) -> None:
     """Print the fleet-wide violation counts underlying the readiness score.
 
     The three headlines above each describe one scenario's own designed-for
-    failure, but any run -- including ones not called out by name, like the
-    drift scenario's send_email call also independently leaking PII -- can
+    failure, but any run, including ones not called out by name, like the
+    drift scenario's send_email call also independently leaking PII, can
     trigger additional flags that still count toward the score. This line makes
     the score's arithmetic checkable from console output alone.
     """
@@ -179,7 +179,7 @@ def _print_score_breakdown(report: AuditReport) -> None:
     print(
         f"Fleet-wide across all {report.total_runs} runs: {total_ungrounded} ungrounded, "
         f"{total_contradicted} contradicted, {total_policy} policy violations, "
-        f"{total_drift} drift alert(s) -- see the full report for anything beyond "
+        f"{total_drift} drift alert(s). See the full report for anything beyond "
         "the 3 scenarios above."
     )
 
@@ -197,7 +197,7 @@ def _print_hallucination_headline(
     claim = ungrounded[0]
     print(
         f"✓ Caught {len(ungrounded)} UNGROUNDED claim: {agent_name} reported "
-        f'"{claim.claim.claim_text}" -- {claim.evidence_gap}'
+        f'"{claim.claim.claim_text}". {claim.evidence_gap}'
     )
     return True
 

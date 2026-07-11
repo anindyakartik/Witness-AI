@@ -7,7 +7,7 @@ against two independent sources: the execution trace (what tools were actually
 called, with what results) and the true state of the mock systems acted on.
 
 System state is authoritative. If the mock system doesn't confirm the claimed
-effect exists, the claim is UNGROUNDED -- regardless of what the trace shows the
+effect exists, the claim is UNGROUNDED, regardless of what the trace shows the
 tool itself reported (a tool can report success for a write that was silently
 dropped; that gap is exactly the failure mode this project exists to catch).
 CONTRADICTED is reserved for the narrower case where the run demonstrably produced
@@ -60,7 +60,7 @@ class GroundingResult:
 
 @dataclass(frozen=True)
 class MockSystems:
-    """The exact mock instances a run acted on -- grounding must check against
+    """The exact mock instances a run acted on, grounding must check against
     these, not fresh ones, since they hold the run's real resulting state."""
 
     ticketing: TicketingSystem
@@ -308,7 +308,7 @@ class GroundingChecker:
             )
 
         # Independently re-run the same query live rather than trusting the tool's
-        # own cached result -- this is the second, independent evidence source.
+        # own cached result, this is the second, independent evidence source.
         query = search_calls[-1].payload["args"].get("query", "")
         live = self.mocks.database.search_customer(query)
         actual_count = len(live.get("matches", []))

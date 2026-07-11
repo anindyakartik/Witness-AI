@@ -3,7 +3,7 @@
 Every step is traced: LLMClient.generate() emits `llm_call` events and
 ToolRegistry.invoke() emits `tool_call` events. This module's only job is the
 plan -> call tool -> observe -> repeat control flow, and capturing the agent's
-final natural-language message -- the claims the GroundingChecker later verifies.
+final natural-language message, the claims the GroundingChecker later verifies.
 It knows nothing about specific agents, policies, or scenarios beyond the generic
 AgentDefinition contract.
 """
@@ -44,7 +44,7 @@ def run_agent(
     """Run `agent` on `task` to completion (or until `max_steps`), fully traced.
 
     `tool_allowlist_override`, if given, replaces the set of tools actually made
-    callable this run -- used by scenarios to simulate an agent's behavior
+    callable this run, used by scenarios to simulate an agent's behavior
     expanding beyond its declared allowlist (e.g. the drift scenario). Governance
     rules still judge tool calls against `agent.tool_allowlist`, the canonical
     declaration, regardless of what was made callable in a given run.
