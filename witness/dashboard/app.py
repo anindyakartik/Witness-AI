@@ -72,11 +72,22 @@ _CSS = f"""
   --serif: 'IBM Plex Serif', Georgia, serif;
   --sans: 'IBM Plex Sans', -apple-system, sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --lift: 0 1px 2px rgba(24,17,10,.05), 0 4px 10px rgba(24,17,10,.045);
+  --lift-sm: 0 1px 2px rgba(24,17,10,.05);
 }}
 
 html, body, [class*="css"] {{ font-family: var(--sans); }}
 .stApp {{ background: var(--paper); }}
 section[data-testid="stSidebar"] {{ background: var(--surface); border-right: 1px solid var(--hairline); }}
+
+/* ---- strip Streamlit's own chrome: no rainbow run-bar, no Deploy button,
+   header blends into the page so the app reads as built, not templated ---- */
+div[data-testid="stDecoration"] {{ display: none; }}
+div[data-testid="stToolbar"] {{ display: none; }}
+header[data-testid="stHeader"] {{ background: transparent; box-shadow: none; height: 2.25rem; }}
+#MainMenu {{ visibility: hidden; }}
+footer {{ visibility: hidden; }}
+div.block-container {{ padding-top: 1.6rem; max-width: 78rem; }}
 
 /* ---- masthead / hero, no card, no gradient: a report letterhead ---- */
 .wit-mast {{ border-top: 2px solid var(--ink); border-bottom: 1px solid var(--hairline);
@@ -88,9 +99,10 @@ section[data-testid="stSidebar"] {{ background: var(--surface); border-right: 1p
 .wit-mast p {{ font-size: 1.02rem; margin: 0; color: var(--ink-soft); line-height: 1.55;
   max-width: 46rem; }}
 
-/* ---- step cards: hairline, indexed, no decorative color ---- */
-.wit-step {{ border: 1px solid var(--hairline); border-radius: 4px;
-  padding: 1rem 1.2rem 1.05rem 1.2rem; margin: .6rem 0; background: var(--surface); }}
+/* ---- step cards: lifted paper, indexed, no decorative color ---- */
+.wit-step {{ border: 1px solid var(--hairline); border-radius: 10px; box-shadow: var(--lift);
+  padding: 1.05rem 1.3rem 1.1rem 1.3rem; margin: .7rem 0; background: var(--surface);
+  transition: box-shadow .15s ease, transform .15s ease; }}
 .wit-step .head {{ display: flex; align-items: baseline; gap: .65rem; margin-bottom: .5rem; }}
 .wit-step .idx {{ font-family: var(--mono); font-size: .82rem; color: var(--muted);
   font-weight: 600; }}
@@ -99,7 +111,7 @@ section[data-testid="stSidebar"] {{ background: var(--surface); border-right: 1p
 .wit-step .body b {{ color: var(--ink); font-weight: 600; }}
 .wit-mono {{ font-family: var(--mono); font-size: .84rem; color: var(--ink);
   background: var(--paper); border: 1px solid var(--hairline);
-  padding: .5rem .7rem; border-radius: 3px; display: block; margin-top: .6rem;
+  padding: .5rem .7rem; border-radius: 6px; display: block; margin-top: .6rem;
   white-space: pre-wrap; word-break: break-word; }}
 .wit-note {{ font-size: .84rem; color: var(--muted); margin-top: .55rem; }}
 
@@ -109,8 +121,8 @@ section[data-testid="stSidebar"] {{ background: var(--surface); border-right: 1p
    inline "--x: ..." declaration, so var(--x) here would resolve to
    nothing. Only static tokens declared in this stylesheet are safe to
    reference with var(). */
-.wit-verdict {{ border-radius: 4px; padding: .85rem 1.1rem; margin: .3rem 0 1rem 0;
-  display: flex; align-items: center; gap: .7rem; }}
+.wit-verdict {{ border-radius: 10px; padding: .85rem 1.1rem; margin: .3rem 0 1rem 0;
+  display: flex; align-items: center; gap: .7rem; box-shadow: var(--lift-sm); }}
 .wit-verdict .mark {{ font-family: var(--mono); font-size: 1.15rem; font-weight: 600;
   width: 1.3rem; text-align: center; }}
 .wit-verdict .big {{ font-family: var(--serif); font-size: 1.25rem; font-weight: 600;
@@ -118,13 +130,13 @@ section[data-testid="stSidebar"] {{ background: var(--surface); border-right: 1p
 .wit-verdict .gloss {{ color: var(--ink-soft); font-size: .92rem; }}
 
 .wit-evidence {{ border: 1px solid var(--hairline); border-left: 3px solid var(--muted);
-  border-radius: 3px; padding: .7rem .85rem; background: var(--surface);
-  font-size: .93rem; color: var(--ink-soft); line-height: 1.5; }}
+  border-radius: 6px; padding: .7rem .85rem; background: var(--surface);
+  font-size: .93rem; color: var(--ink-soft); line-height: 1.5; box-shadow: var(--lift-sm); }}
 
 /* ---- readiness ring: single-hue conic fill, status color only ---- */
 .wit-ring-wrap {{ display: flex; flex-direction: column; align-items: center;
-  border: 1px solid var(--hairline); border-radius: 4px; padding: 1.3rem 1rem;
-  background: var(--surface); height: 100%; justify-content: center; }}
+  border: 1px solid var(--hairline); border-radius: 10px; padding: 1.3rem 1rem;
+  background: var(--surface); height: 100%; justify-content: center; box-shadow: var(--lift); }}
 .wit-ring {{ width: 132px; height: 132px; border-radius: 50%; position: relative; }}
 .wit-ring::before {{ content: ""; position: absolute; inset: 11px; border-radius: 50%;
   background: var(--surface); }}
@@ -134,44 +146,102 @@ section[data-testid="stSidebar"] {{ background: var(--surface); border-right: 1p
   letter-spacing: 1.6px; color: var(--muted); margin-top: .8rem; }}
 
 /* ---- stat tiles ---- */
-.wit-stat {{ border: 1px solid var(--hairline); border-radius: 4px; padding: .9rem 1.05rem;
-  background: var(--surface); height: 100%; }}
+.wit-stat {{ border: 1px solid var(--hairline); border-radius: 10px; padding: .95rem 1.1rem;
+  background: var(--surface); height: 100%; box-shadow: var(--lift); }}
 .wit-stat .v {{ font-size: 1.7rem; font-weight: 700; color: var(--ink); line-height: 1; }}
 .wit-stat .v.bad {{ color: var(--critical); }}
 .wit-stat .l {{ font-family: var(--mono); font-size: .7rem; text-transform: uppercase;
   letter-spacing: 1.4px; color: var(--muted); margin-top: .4rem; }}
 
 .wit-pillrow {{ display: flex; gap: .5rem; flex-wrap: wrap; margin: .3rem 0 1.1rem 0; }}
-.wit-pill {{ border: 1px solid var(--hairline); border-radius: 3px; font-family: var(--mono);
+.wit-pill {{ border: 1px solid var(--hairline); border-radius: 6px; font-family: var(--mono);
   padding: .3rem .7rem; font-size: .8rem; color: var(--ink-soft); background: var(--surface); }}
 
-.wit-tri {{ border: 1px solid var(--hairline); border-radius: 4px; padding: 1.05rem 1.15rem;
-  height: 100%; background: var(--surface); }}
+.wit-tri {{ border: 1px solid var(--hairline); border-radius: 10px; padding: 1.1rem 1.2rem;
+  height: 100%; background: var(--surface); box-shadow: var(--lift); }}
 .wit-tri .idx {{ font-family: var(--mono); font-size: .78rem; color: var(--muted);
   font-weight: 600; margin-bottom: .5rem; display: block; }}
 .wit-tri .k {{ font-weight: 600; font-size: 1rem; margin-bottom: .35rem; color: var(--ink); }}
 .wit-tri .v {{ color: var(--ink-soft); font-size: .92rem; line-height: 1.55; }}
 
 .wit-tag {{ font-family: var(--mono); font-size: .74rem; font-weight: 600;
-  padding: .1rem .4rem; border-radius: 3px; border: 1px solid var(--hairline);
+  padding: .1rem .4rem; border-radius: 4px; border: 1px solid var(--hairline);
   color: var(--ink-soft); white-space: nowrap; }}
 .wit-tl-row {{ padding: .3rem 0; border-bottom: 1px solid var(--hairline); font-size: .93rem; }}
 .wit-tl-row:last-child {{ border-bottom: none; }}
 
 /* ---- sidebar wordmark ---- */
-.wit-brand {{ display: flex; align-items: center; gap: .55rem; margin-bottom: .15rem; }}
-.wit-brand .mark {{ width: 30px; height: 30px; border: 1.5px solid var(--ink); border-radius: 50%;
+.wit-brand {{ display: flex; align-items: center; gap: .6rem; margin-bottom: .2rem; }}
+.wit-brand .mark {{ width: 32px; height: 32px; border: 1.5px solid var(--ink); border-radius: 50%;
   display: flex; align-items: center; justify-content: center; flex: 0 0 auto; }}
-.wit-brand .mark span {{ width: 10px; height: 10px; border-radius: 50%; background: var(--ink); }}
-.wit-brand .name {{ font-family: var(--serif); font-weight: 600; font-size: 1.35rem;
+.wit-brand .mark span {{ width: 11px; height: 11px; border-radius: 50%; background: var(--ink); }}
+.wit-brand .name {{ font-family: var(--serif); font-weight: 600; font-size: 1.4rem;
   color: var(--ink); letter-spacing: -.2px; }}
+.wit-spec {{ font-family: var(--mono); font-size: .72rem; color: var(--muted);
+  letter-spacing: .2px; line-height: 1.5; margin: .35rem 0 .7rem 0; }}
+
+/* ---- sidebar nav: a real navigation rail, not a bare radio list ----
+   Streamlit's own visual dot is hidden; each row becomes a full-width
+   pill with a hand-drawn glyph, and the checked input drives styling
+   entirely through :has(), so the four destinations read as distinct
+   places rather than options in a form. */
+section[data-testid="stSidebar"] div[role="radiogroup"] {{ gap: .15rem; }}
+section[data-testid="stSidebar"] label[data-baseweb="radio"] {{
+  position: relative; display: flex; align-items: center; width: 100%;
+  padding: .5rem .6rem .5rem 2.15rem; border-radius: 8px; margin: 0;
+  transition: background .12s ease; cursor: pointer; }}
+section[data-testid="stSidebar"] label[data-baseweb="radio"]:hover {{
+  background: rgba(24,23,21,.05); }}
+section[data-testid="stSidebar"] label[data-baseweb="radio"]:has(input:checked) {{
+  background: var(--ink); }}
+section[data-testid="stSidebar"] label[data-baseweb="radio"] > div:first-child {{
+  display: none; }}
+section[data-testid="stSidebar"] label[data-baseweb="radio"] [data-testid="stMarkdownContainer"] p {{
+  font-size: .92rem; color: var(--ink-soft); font-weight: 500; }}
+section[data-testid="stSidebar"] label[data-baseweb="radio"]:has(input:checked)
+  [data-testid="stMarkdownContainer"] p {{ color: var(--paper); font-weight: 600; }}
+
+section[data-testid="stSidebar"] label[data-baseweb="radio"]::before {{
+  content: ""; position: absolute; left: .68rem; top: 50%; transform: translateY(-50%);
+  width: 12px; height: 12px; border: 1.5px solid var(--ink-soft); border-radius: 50%;
+  box-sizing: border-box; }}
+section[data-testid="stSidebar"] label[data-baseweb="radio"]:has(input:checked)::before {{
+  border-color: var(--paper); }}
+section[data-testid="stSidebar"] label[data-baseweb="radio"]:nth-of-type(1)::after {{
+  content: ""; position: absolute; left: 1.045rem; top: 50%; transform: translateY(-50%);
+  width: 4px; height: 4px; border-radius: 50%; background: var(--ink-soft); }}
+section[data-testid="stSidebar"] label[data-baseweb="radio"]:nth-of-type(1):has(input:checked)::after {{
+  background: var(--paper); }}
+section[data-testid="stSidebar"] label[data-baseweb="radio"]:nth-of-type(2)::before {{
+  border-radius: 3px; width: 11px; height: 11px; }}
+section[data-testid="stSidebar"] label[data-baseweb="radio"]:nth-of-type(2)::after {{
+  content: ""; position: absolute; left: .93rem; top: 50%; transform: translateY(-50%);
+  width: 5px; height: 5px; border-right: 1.5px solid var(--ink-soft);
+  border-bottom: 1.5px solid var(--ink-soft); }}
+section[data-testid="stSidebar"] label[data-baseweb="radio"]:nth-of-type(2):has(input:checked)::before,
+section[data-testid="stSidebar"] label[data-baseweb="radio"]:nth-of-type(2):has(input:checked)::after {{
+  border-color: var(--paper); }}
+section[data-testid="stSidebar"] label[data-baseweb="radio"]:nth-of-type(3)::before {{
+  border-width: 3px; }}
+section[data-testid="stSidebar"] label[data-baseweb="radio"]:nth-of-type(3)::after {{
+  content: none; }}
+section[data-testid="stSidebar"] label[data-baseweb="radio"]:nth-of-type(4)::before {{
+  border: none; border-radius: 0; width: 13px; height: 2px; background: var(--ink-soft);
+  box-shadow: 0 4px 0 var(--ink-soft), 0 -4px 0 var(--ink-soft); }}
+section[data-testid="stSidebar"] label[data-baseweb="radio"]:nth-of-type(4):has(input:checked)::before {{
+  background: var(--paper); box-shadow: 0 4px 0 var(--paper), 0 -4px 0 var(--paper); }}
+
+.wit-colophon {{ font-family: var(--mono); font-size: .74rem; color: var(--muted);
+  line-height: 1.7; }}
+.wit-colophon b {{ color: var(--ink-soft); font-weight: 600; }}
 
 /* Tighten Streamlit chrome so it reads as designed, not templated. */
 div[data-testid="stMetricValue"] {{ font-family: var(--sans); }}
-button[kind="primary"] {{ border-radius: 3px; font-weight: 600; }}
+button[kind="primary"] {{ border-radius: 7px; font-weight: 600; box-shadow: var(--lift-sm); }}
+button[kind="secondary"] {{ border-radius: 7px; }}
 .stTabs [data-baseweb="tab"] {{ font-weight: 600; }}
-#MainMenu {{ visibility: hidden; }}
-footer {{ visibility: hidden; }}
+div[data-testid="stExpander"] {{ border: 1px solid var(--hairline); border-radius: 10px;
+  box-shadow: var(--lift-sm); background: var(--surface); }}
 </style>
 """
 
@@ -676,8 +746,11 @@ def render_thesis() -> None:
 
 
 def main() -> None:
-    st.set_page_config(page_title="Witness: see what your agents actually did",
-                       page_icon="\U0001f441", layout="wide")
+    st.set_page_config(
+        page_title="Witness: see what your agents actually did",
+        page_icon=str(Path(__file__).resolve().parent / "assets" / "favicon.png"),
+        layout="wide",
+    )
     st.markdown(_CSS, unsafe_allow_html=True)
 
     runs_dir_marker = str(sorted(config.RUNS_DIR.glob("*.jsonl")))
@@ -699,7 +772,8 @@ def main() -> None:
     with st.sidebar:
         st.markdown(
             '<div class="wit-brand"><div class="mark"><span></span></div>'
-            '<div class="name">Witness</div></div>',
+            '<div class="name">Witness</div></div>'
+            '<div class="wit-spec">Gemini 2.5 Flash Lite &middot; 4 agents &middot; 63 tests</div>',
             unsafe_allow_html=True,
         )
         st.caption("Runtime governance for AI agent fleets.")
@@ -720,6 +794,20 @@ def main() -> None:
             "flagship failure, built from real trace data."
         )
         st.divider()
+        with st.expander("About this project"):
+            st.markdown(
+                '<div class="wit-colophon">'
+                "<b>What it is</b><br>A runtime governance layer that checks what an LLM "
+                "agent claims to have done against the real state of the systems it "
+                "touched, instead of trusting the agent or its tools.<br><br>"
+                "<b>Stack</b><br>Python, Gemini 2.5 Flash Lite, Streamlit, pandas. "
+                "No framework in the verification path, every check is plain code.<br><br>"
+                "<b>Pipeline</b><br>trace &rarr; grounding + policy + drift &rarr; audit "
+                "report &rarr; this dashboard.<br><br>"
+                "<b>Scale of the demo</b><br>4 agents, 27 recorded runs, 63 tests, "
+                "replayed from committed cassettes with no API key.</div>",
+                unsafe_allow_html=True,
+            )
         st.caption("[View source on GitHub](https://github.com/anindyakartik/Witness-AI)")
 
     if page == "Watch it catch a lie":
